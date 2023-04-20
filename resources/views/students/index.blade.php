@@ -26,6 +26,26 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    @if ($message = session('flash_message'))
+                                        <script type="text/javascript">
+                                            const Toast = Swal.mixin({
+                                                toast: true,
+                                                position: 'top-end',
+                                                showConfirmButton: false,
+                                                timer: 3000,
+                                                timerProgressBar: true,
+                                                didOpen: (toast) => {
+                                                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                                                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                                                }
+                                            })
+
+                                            Toast.fire({
+                                                icon: 'success',
+                                                title: '{{ $message }}'
+                                            })
+                                        </script>
+                                    @endif
                                     @foreach ($students as $item)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
@@ -38,7 +58,7 @@
                                                         <i class="fa fa-eye" aria-hidden="true"></i> Afficher
                                                     </button>
                                                 </a>
-                                                <a href="{{ url('/student/' . $item->id . '/edit') }}" title="Edit Student">
+                                                <a href="{{ url('/student/' . $item->id) . '/edit' }}" title="Edit Student">
                                                     <button class="btn btn-primary btn-sm">
                                                         <i class="fa fa-pencil-square-o" aria-hidden="true"></i> Modifier
                                                     </button>
@@ -49,9 +69,31 @@
                                                     @csrf
 
                                                     <button type="submit" class="btn btn-danger btn-sm"
-                                                        title="Delete Student" onclick="return confirm('Confirm delete?')">
+                                                        title="Delete Student" onclick="confirmDelete()">
+
                                                         <i class="fa fa-trash-o" aria-hidden="true"></i> Supprimer
                                                     </button>
+                                                    <script type="text/javascript">
+                                                        function confirmDelete() {
+                                                            Swal.fire({
+                                                                title: 'Are you sure?',
+                                                                text: "You won't be able to revert this!",
+                                                                icon: 'warning',
+                                                                showCancelButton: true,
+                                                                confirmButtonColor: '#3085d6',
+                                                                cancelButtonColor: '#d33',
+                                                                confirmButtonText: 'Yes, delete it!'
+                                                            }).then((result) => {
+                                                                if (result.isConfirmed) {
+                                                                    Swal.fire(
+                                                                        'Deleted!',
+                                                                        'Your file has been deleted.',
+                                                                        'success'
+                                                                    )
+                                                                }
+                                                            })
+                                                        }
+                                                    </script>
                                                 </form>
                                             </td>
                                         </tr>

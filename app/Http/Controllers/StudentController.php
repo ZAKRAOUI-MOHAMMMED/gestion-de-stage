@@ -20,6 +20,11 @@ class StudentController extends Controller
 
         public function store(Request $request)
         {
+        //     $student =new Student;
+        // $student ->name = $request->name;
+        // $student ->address = $request->address;
+        // $student->mobile = $request->mobile;
+        // $student->save();
             $input = $request->all();
             Student::create($input);
             return redirect('student')->with('flash_message', 'Student Addedd!');
@@ -40,6 +45,11 @@ class StudentController extends Controller
         public function update(Request $request, $id)
         {
             $student = Student::find($id);
+        // $student ->name = $request->name;
+        // $student ->address = $request->address;
+        // $student->mobile = $request->mobile;
+        // $student->save();
+
             $input = $request->all();
             $student->update($input);
             return redirect('student')->with('flash_message', 'student Updated!');
