@@ -9,8 +9,9 @@
                         <h2 class="text-center">Gestion des stagiaires</h2>
                     </div>
                     <div class="card-body">
-                        <a href="{{ url('/student/create') }}" class="btn btn-success btn-sm" title="Add New Student">
-                            <i class="fa fa-plus" aria-hidden="true"></i> Add New
+                        <a href="{{ url('/students/create') }}" class="btn btn-success btn-sm"
+                            title="Ajouter un nouveau stagiaire">
+                            <i class="fa fa-plus" aria-hidden="true"></i> Ajouter
                         </a>
                         <br />
                         <br />
@@ -19,9 +20,9 @@
                                 <thead class="table-dark">
                                     <tr>
                                         <th>#</th>
-                                        <th>Name</th>
-                                        <th>Address</th>
-                                        <th>Mobile</th>
+                                        <th>Nom</th>
+                                        <th>Adresse</th>
+                                        <th>Téléphone</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
@@ -53,53 +54,55 @@
                                             <td>{{ $item->address }}</td>
                                             <td>{{ $item->mobile }}</td>
                                             <td>
-                                                <a href="{{ url('/student/' . $item->id) }}" title="View Student">
+                                                <a href="{{ url('/students/' . $item->id) }}" title="Voir le stagiaire">
                                                     <button class="btn btn-info btn-sm">
                                                         <i class="fa fa-eye" aria-hidden="true"></i> Afficher
                                                     </button>
                                                 </a>
-                                                <a href="{{ url('/student/' . $item->id) . '/edit' }}" title="Edit Student">
+                                                <a href="{{ url('/students/' . $item->id) . '/edit' }}"
+                                                    title="Modifier le stagiaire">
                                                     <button class="btn btn-primary btn-sm">
                                                         <i class="fa fa-pencil-square-o" aria-hidden="true"></i> Modifier
                                                     </button>
                                                 </a>
-                                                <form method="POST" action="{{ url('/student' . '/' . $item->id) }}"
+                                                <form method="POST" action="{{ route('students.destroy', $item->id) }}"
                                                     accept-charset="UTF-8" style="display:inline">
-                                                    @method('DELETE')
                                                     @csrf
-
+                                                    @method('DELETE')
                                                     <button type="submit" class="btn btn-danger btn-sm"
-                                                        title="Delete Student" onclick="confirmDelete()">
+                                                        title="Supprimer le stagiaire" onclick="confirmDelete(event)">
 
                                                         <i class="fa fa-trash-o" aria-hidden="true"></i> Supprimer
                                                     </button>
                                                     <script type="text/javascript">
-                                                        function confirmDelete() {
+                                                        function confirmDelete(event) {
+                                                            event.preventDefault();
                                                             Swal.fire({
-                                                                title: 'Are you sure?',
-                                                                text: "You won't be able to revert this!",
+                                                                title: 'Êtes-vous sûr?',
+                                                                text: "Vous ne pourrez pas revenir en arrière!",
                                                                 icon: 'warning',
                                                                 showCancelButton: true,
                                                                 confirmButtonColor: '#3085d6',
                                                                 cancelButtonColor: '#d33',
-                                                                confirmButtonText: 'Yes, delete it!'
+                                                                confirmButtonText: 'Oui, supprimer!'
                                                             }).then((result) => {
                                                                 if (result.isConfirmed) {
-                                                                    Swal.fire(
-                                                                        'Deleted!',
-                                                                        'Your file has been deleted.',
-                                                                        'success'
-                                                                    )
+                                                                    event.target.closest('form').submit();
                                                                 }
                                                             })
                                                         }
                                                     </script>
+
+
+
                                                 </form>
+
                                             </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
                             </table>
+                            {{ $students->links('pagination::bootstrap-5') }}
                         </div>
                     </div>
                 </div>
